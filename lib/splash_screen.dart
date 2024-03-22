@@ -3,27 +3,22 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:name_storage/home_page.dart';
 import 'package:name_storage/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  State<SplashScreen> createState() => SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class SplashScreenState extends State<SplashScreen> {
+  static const String LOGIN = "login";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Timer(Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LoginPage(),
-        ),
-      );
-    });
+    whereToGo();
   }
 
   @override
@@ -37,5 +32,37 @@ class _SplashScreenState extends State<SplashScreen> {
         size: 80,
       )),
     );
+  }
+
+  void whereToGo() async {
+    var prefs = await SharedPreferences.getInstance();
+    var isLoggedIn = prefs.getBool(LOGIN);
+
+    Timer(Duration(seconds: 3), () {
+      if (isLoggedIn != null) {
+        if (isLoggedIn) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(),
+            ),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LoginPage(),
+            ),
+          );
+        }
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginPage(),
+          ),
+        );
+      }
+    });
   }
 }

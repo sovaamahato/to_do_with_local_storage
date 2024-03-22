@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:name_storage/home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'splash_screen.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -47,7 +50,9 @@ class LoginPage extends StatelessWidget {
                 height: 10,
               ),
               ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    var prefs = await SharedPreferences.getInstance();
+                    prefs.setBool(SplashScreenState.LOGIN, true);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) {

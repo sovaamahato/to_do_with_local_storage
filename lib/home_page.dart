@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:name_storage/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'splash_screen.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -21,6 +24,23 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () async {
+                var prefs = await SharedPreferences.getInstance();
+                prefs.setBool(SplashScreenState.LOGIN, false);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return LoginPage();
+                  }),
+                );
+              },
+              icon: Icon(
+                Icons.logout,
+                color: Colors.black,
+              ))
+        ],
         title: const Text("To do app"),
       ),
       body: Padding(
